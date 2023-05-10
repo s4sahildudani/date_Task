@@ -16,7 +16,7 @@ function DateTask() {
   console.log(date);
   const [timezone, setTimezone] = useState("UTC");
   const [selectedDay, setSelectedDay] = useState("");
-
+  
   const handleTimezoneChange = (event) => {
     setTimezone(event.target.value);
   };
@@ -90,53 +90,59 @@ console.log("startTime",endTime)
         </FormControl>
       </Box>
       {daysOfWeek.map((day, index) => {
-        const dayDate = date.clone().startOf("week").add(index, "days");
-        const isWeekday = index >= 0 && index <= 4;
+  const dayDate = date.clone().startOf("week").add(index, "days");
+  const isWeekday = index >= 0 && index <= 4;
+  const isSelected = selectedDay === day;
 
-        const isSelected = selectedDay === day;
+  // Check if the day is today or a future day
+  const isTodayOrFuture = dayDate.isSameOrAfter(moment().startOf("day"));
 
-        return (
-          <Box
-            key={`${day}-${dayDate.format("M/D")}`}
-            sx={{
-              display: "flex",
-              border: "1px solid black",
-              mt: 2,
-              ml: 1,
-              background: isSelected ? "#eee" : "none",
-            }}
-            onClick={() => setSelectedDay(day)}
-          >
-            <Box
-              sx={{
-                background: "silver",
-                width: "15%",
-                textAlign: "center",
-                fontSize: "20px",
-                color: isSelected ? "blue" : "inherit",
-              }}
-            >
-              <Typography sx={{ color: "red", width: "85%", mt: 2 }}>
-                {day}
-              </Typography>
-              <Typography>{dayDate.format("M/D")}</Typography>
-            </Box>
-            {isWeekday && (
-              <Box>
-                {times.map((time) => {
-                  return (
-                    <FormControlLabel
-                      key={`${day}-${time}`}
-                      control={<Checkbox checked={false} />}
-                      label={convertToTimezone(time)}
-                    />
-                  );
-                })}
-              </Box>
-            )}
-          </Box>
-        );
-      })}
+  console.log("istoday",isTodayOrAfter);
+  return (
+    <Box
+      key={`${day}-${dayDate.format("M/D")}`}
+      sx={{
+        display: "flex",
+        border: "1px solid black",
+        mt: 2,
+        ml: 1,
+        background: isSelected ? "#eee" : "none",
+      }}
+      onClick={() => setSelectedDay(day)}
+    >
+      <Box
+        sx={{
+          background: "silver",
+          width: "15%",
+          textAlign: "center",
+          fontSize: "20px",
+          color: isSelected ? "blue" : "inherit",
+        }}
+      >
+        <Typography sx={{ color: "red", width: "85%", mt: 2 }}>
+          {day}
+        </Typography>
+        <Typography>{dayDate.format("M/D")}</Typography>
+      </Box>
+      {isWeekday && isTodayOrFuture && (
+        <Box>
+          {times.map((time) => {
+            return (
+              <FormControlLabel
+                key={`${day}-${time}`}
+                control={<Checkbox checked={false} />}
+                label={convertToTimezone(time)}
+              />
+            );
+          })}
+        </Box>
+      )}
+    </Box>
+  );
+})}
+
+
+
     </>
   );
 }
