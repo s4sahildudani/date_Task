@@ -104,7 +104,7 @@ function DateTask() {
               border: "1px solid black",
               mt: 2,
               ml: 1,
-              background: isSelected ? "#eee" : "none",
+              
             }}
             onClick={() => setSelectedDay(day)}
           >
@@ -114,7 +114,7 @@ function DateTask() {
                 width: "15%",
                 textAlign: "center",
                 fontSize: "20px",
-                color: isSelected ? "blue" : "inherit",
+                
               }}
             >
               <Typography sx={{ color: "red", width: "85%", mt: 2 }}>
@@ -128,7 +128,7 @@ function DateTask() {
                   return (
                     <FormControlLabel
                       key={`${day}-${time}`}
-                      control={<Checkbox checked={false} />}
+                      control={<Checkbox  />}
                       label={convertToTimezone(time)}
                     />
                   );

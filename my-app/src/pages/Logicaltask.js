@@ -1,5 +1,7 @@
+
 import React, { useState } from "react";
 import { Typography, ListItemText, List, ListItem } from "@mui/material";
+
 function Logicaltask() {
     const [data] = useState(['toy', 'shop', 'toy', 'cake', 'pastry', 'shop']);
 
@@ -7,25 +9,48 @@ function Logicaltask() {
   
     for (let i = 0; i < data.length; i++) {
       const item = data[i];
-      counts[item] = counts[item] ? counts[item] + 1 : 1;
-    }
-  
-    const elements = [];
-    for (let key in counts) {
-      if (counts.hasOwnProperty(key)) {
-        elements.push(
-          <ListItem key={key}>
-            <ListItemText primary={`${key} = ${counts[key]}`} />
-          </ListItem>
-        );
+      if (counts[item]) {
+        counts[item]++;
+      } else {
+        counts[item] = 1;
       }
     }
   
-    elements.push(
-      <ListItem key="shop-final">
-        <ListItemText primary={`shop = ${counts['shop'] - 1}`} />
-      </ListItem>
-    );
+    const elements = [];
+  
+    // Display specific lines
+    if (counts['toy']) {
+      elements.push(
+        <ListItem key="toy">
+          <ListItemText primary={`toy = ${counts['toy']}`} />
+        </ListItem>
+      );
+    }
+  
+    if (counts['shop']) {
+      elements.push(
+        <ListItem key="shop">
+          <ListItemText primary={`shop = ${counts['shop']}`} />
+        </ListItem>
+      );
+    }
+  
+    if (counts['cake']) {
+      elements.push(
+        <ListItem key="cake">
+          <ListItemText primary={`cake = ${counts['cake']}`} />
+        </ListItem>
+      );
+    }
+  
+    if (counts['pastry']) {
+      elements.push(
+        <ListItem key="pastry">
+          <ListItemText primary={`pastry = ${counts['pastry']}`} />
+        </ListItem>
+      );
+    }
+
   return (
     <>
       <Typography variant="h6">Output</Typography>
