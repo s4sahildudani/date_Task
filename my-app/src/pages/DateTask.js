@@ -16,7 +16,7 @@ function DateTask() {
   console.log(date);
   const [timezone, setTimezone] = useState("UTC");
   const [selectedDay, setSelectedDay] = useState("");
-  
+
   const handleTimezoneChange = (event) => {
     setTimezone(event.target.value);
   };
@@ -33,13 +33,13 @@ function DateTask() {
 
   const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri"];
   const today = moment().startOf("day");
-  const daysFromToday = date.diff(today, "days");
+  const daysFromToday = date.clone().startOf("week").diff(today, "days");
   const isTodayOrAfter = daysFromToday >= 0 && daysFromToday < 5;
 
   const startTime = moment().startOf("day").add(8, "hours");
   const endTime = moment().startOf("day").add(23, "hours");
-console.log("endtime",endTime);
-console.log("startTime",endTime)
+  console.log("endtime", endTime);
+  console.log("startTime", endTime);
   const times = [];
 
   let current = startTime.clone();
@@ -48,8 +48,6 @@ console.log("startTime",endTime)
     times.push(current.format("h:mm A"));
     current.add(30, "minutes");
   }
-  
-  
 
   const convertToTimezone = (time) => {
     const datetime = moment.tz(
@@ -90,59 +88,56 @@ console.log("startTime",endTime)
         </FormControl>
       </Box>
       {daysOfWeek.map((day, index) => {
-  const dayDate = date.clone().startOf("week").add(index, "days");
-  const isWeekday = index >= 0 && index <= 4;
-  const isSelected = selectedDay === day;
+        const dayDate = date.clone().startOf("week").add(index + 1, "days");
+        const isWeekday = index >= 0 && index <= 4;
+        const isSelected = selectedDay === day;
 
-  // Check if the day is today or a future day
-  const isTodayOrFuture = dayDate.isSameOrAfter(moment().startOf("day"));
+        // Check if the day is today or a future day
+        const isTodayOrFuture = dayDate.isSameOrAfter(moment().startOf("day"));
 
-  console.log("istoday",isTodayOrAfter);
-  return (
-    <Box
-      key={`${day}-${dayDate.format("M/D")}`}
-      sx={{
-        display: "flex",
-        border: "1px solid black",
-        mt: 2,
-        ml: 1,
-        background: isSelected ? "#eee" : "none",
-      }}
-      onClick={() => setSelectedDay(day)}
-    >
-      <Box
-        sx={{
-          background: "silver",
-          width: "15%",
-          textAlign: "center",
-          fontSize: "20px",
-          color: isSelected ? "blue" : "inherit",
-        }}
-      >
-        <Typography sx={{ color: "red", width: "85%", mt: 2 }}>
-          {day}
-        </Typography>
-        <Typography>{dayDate.format("M/D")}</Typography>
-      </Box>
-      {isWeekday && isTodayOrFuture && (
-        <Box>
-          {times.map((time) => {
-            return (
-              <FormControlLabel
-                key={`${day}-${time}`}
-                control={<Checkbox checked={false} />}
-                label={convertToTimezone(time)}
-              />
-            );
-          })}
-        </Box>
-      )}
-    </Box>
-  );
-})}
-
-
-
+        console.log("istoday", isTodayOrAfter);
+        return (
+          <Box
+            key={`${day}-${dayDate.format("M/D")}`}
+            sx={{
+              display: "flex",
+              border: "1px solid black",
+              mt: 2,
+              ml: 1,
+              background: isSelected ? "#eee" : "none",
+            }}
+            onClick={() => setSelectedDay(day)}
+          >
+            <Box
+              sx={{
+                background: "silver",
+                width: "15%",
+                textAlign: "center",
+                fontSize: "20px",
+                color: isSelected ? "blue" : "inherit",
+              }}
+            >
+              <Typography sx={{ color: "red", width: "85%", mt: 2 }}>
+                {day}
+              </Typography>
+              <Typography>{dayDate.format("M/D")}</Typography>
+            </Box>
+            {isWeekday && isTodayOrFuture && (
+              <Box>
+                {times.map((time) => {
+                  return (
+                    <FormControlLabel
+                      key={`${day}-${time}`}
+                      control={<Checkbox checked={false} />}
+                      label={convertToTimezone(time)}
+                    />
+                  );
+                })}
+              </Box>
+            )}
+          </Box>
+        );
+      })}
     </>
   );
 }
